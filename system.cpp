@@ -82,13 +82,14 @@ void System::delBall(){
 
 void System::setCollision(Ball * x , Ball * y){
 	//commento molto veloce
-	/*quando si intersecano le due palline vengono considerate come due punti P1 e P2 che insieme a P3 formano un triangolo rettangolo.
-	con questo triangolo mi trovo l'angolo alfa in P2 che sarebbe l'angolazione delle due palline. La distanza fra gli angoli opposti e 
-	alfa mi dice di quanto devo ruotare ulteriormente l'angolo di ogni pallina*/
+	/*quando si intersecano due palline vengono considerate come due punti P1 e P2 che insieme a un terzo P3 formano un triangolo rettangolo.
+	con questo triangolo mi trovo l'angolo alfa in P2 che sarebbe l'angolazione che si verifica con l'urto delle due palline. 
+	La distanza (in termini di gradi) fra gli angoli opposti delle palline e alfa mi dice di quanto devo ruotare ulteriormente l'angolo di ogni pallina*/
+	
 	float p1x, p1y, p2x, p2y, p3x, p3y; //cordinate dei punti di stato
 	float a,b,c; //lati dell'angolo che si forma all'intersezione delle palline
 	float alfa; //angolo che si forma fra l'intersezione delle due palle
-	float angx , angy, delta;
+	float tmp;
 	bool traslato = false;
 	p1x = x->getPosX();
 	p1y = x->getPosY();
@@ -124,10 +125,13 @@ void System::setCollision(Ball * x , Ball * y){
 	if(alfa < 0) alfa += 360;
 	if(alfa >= 360) alfa -= 360;
 	
+	
+	tmp = x->getAngolo();
 	x->setAngolo(this->middleAngle(alfa, y->getAngolo()));
 	alfa += 180;
 	if(alfa >= 360) alfa -= 360;
-	y->setAngolo(this->middleAngle(alfa, x->getAngolo()));
+	y->setAngolo(this->middleAngle(alfa, tmp));
+	
 	
 	while(this->getDistanza(x, y) < x->getRaggio() * 2){
 		x->move();
