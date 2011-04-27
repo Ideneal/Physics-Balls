@@ -1,4 +1,18 @@
-ball: ball.cpp
-	g++ -c ball.cpp
-	g++ -c system.cpp
-	g++ -o game system.o ball.o main.cpp -lSDL -lSDL_image
+CC = g++
+LIBRERIE = -lSDL -lSDL_image
+
+ifeq ($(NAME), )
+	NAME = game
+endif
+
+compile: $(NAME)
+
+%.o: %.cpp
+	$(CC) -c $< -o $@
+
+$(NAME): ball.o system.o main.o
+	@echo "inizio compilazione..."
+	$(CC) -o $@ $^ $(LIBRERIE)
+
+clear: ball.o system.o main.o
+	rm $^
